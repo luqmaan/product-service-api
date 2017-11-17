@@ -1,0 +1,684 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: "[Draft] Product Service API"
+  description: |
+    Draft of a new Poduct API for outbound integration.
+    
+    --- 
+
+    **FOR FURTHER DISCUSSION**
+
+    ## Article information levels
+    Article information are provided on three levels:
+
+    1. Global-level
+    1. Market-level
+
+    ## Catalogue information levels
+    Catalogue information are provided on three levels:
+
+    1. Global-level
+    1. Article-level
+    1. Model-level
+
+    ## Marketing Channels
+    Furthermore, there are three marketing channels (domains):
+
+    1. eCom
+    1. Retail (HERO)
+    1. Wholesale (eCatalogue)
+
+    These are communicated by the optional `marketingChannel` query parameter.
+    When the parameter is omitted, the information common for "all" channels are returned.
+
+    ## Language Variants
+    Where applicable, product information support standard [HTTP Language Variants
+    negotiation](https://adidas-group.gitbooks.io/api-guidelines/content/execution/localization.html)
+    using the `Accept-Language` HTTP Header. 
+
+produces:
+  - application/hal+json      # Representation message format
+  - application/problem+json  # Error message format
+
+schemes:
+  - https
+
+securityDefinitions:
+   "API Key":
+     type: apiKey
+     in: header
+     name: Adidas-API-Key
+
+security:
+  - "API Key": []
+
+paths:
+  /:
+    x-summary: API Root
+
+    get:
+      summary: Retrieve API Root
+      description: Retrieve available top-level actions of the Product Service API
+      responses:
+        200:
+          description: The root of the API
+          schema:
+            allOf:
+              - $ref: '#/definitions/halResource'
+            example:
+              _links:
+                self:
+                  href: /
+                articles:
+                  href: /articles
+                article:
+                  href: /articles/{article_id}
+                articleCatalogue:
+                  href: /articles/{article_id}/catalogue
+                marketArticles:
+                  href: /markets/{area_code}-{region_code}/articles
+                marketArticle:
+                  href: /markets/{area_code}-{region_code}/articles/{article_id}
+                marketCatalogue:
+                  href: /markets/{area_code}-{region_code}/catalogue
+                modelCatalogue:
+                  href: /models/{model_id}/catalogue
+
+  /articles:
+    x-summary: Articles
+
+    get:
+      summary: Retrieve List of Articles
+      description: Retrieve list of all articles.
+      parameters:
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/limit'
+      responses:
+        200:
+          description: The list of articles
+          schema:
+            $ref: '#/definitions/articles'
+
+  /articles/{article_id}:
+    x-summary: Article
+    parameters:
+      - $ref: '#/parameters/articleId'
+      - $ref: '#/parameters/marketingChannel'
+
+    get:
+      summary: Retrieve Article
+      description: Retrieve a particular article by its id.
+      parameters:
+        - $ref: '#/parameters/fields'
+      responses:
+        200:
+          description: One Article
+          schema:
+            $ref: '#/definitions/article'
+
+        404:
+          description: The requested article wasn't found
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /articles/{article_id}/assets:
+    x-summary: Article Assets
+    parameters:
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Article Assets
+      description: Retrieve all assets for a particular article.
+      responses:
+        200:
+          description: Assets for an Article
+          schema:
+            $ref: '#/definitions/assets'
+
+        404:
+          description: Assets for the given article weren't found
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /articles/{article_id}/variants:
+    x-summary: Article Variants
+    parameters:
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Article Variants
+      description: Retrieve all variants for a particular article.
+      responses:
+        200:
+          description: Variants for an Article
+          schema:
+            $ref: '#/definitions/variants'
+
+        404:
+          description: Variants for the given article weren't found.
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /articles/{article_id}/prices:
+    x-summary: Article Prices
+    parameters:
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Article Prices
+      description: Retrieve prices for a particular article.
+      responses:
+        200:
+          description: Prices for an Article
+          schema:
+            $ref: '#/definitions/prices'
+
+        404:
+          description: Prices for the given article weren't found
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /articles/{article_id}/catalogue:
+    x-summary: Article Catalogue
+    parameters:
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Article Catalogue
+      description: Retrieve a particular article's catalogue.
+      responses:
+        200:
+          description: Article Catalogue
+          schema:
+            $ref: '#/definitions/catalogue'
+
+  /markets/{area_code}-{region_code}/articles:
+    x-summary: Market Articles
+    x-description: |
+      Articles specific to a market.
+
+      ---
+
+      **Designer's Note**: As the market identifier is a compoud variable 
+      consisting of area and region code we should use the comma (`,`) and 
+      semi-colon (`;`) to indicate to "indicate nonhierarchical portions of the 
+      URI" e.g.: `/markets;are=52,region=111` however this isn't supported in 
+      Swagger 2.0 and as such the recommended work-around is to combine the two 
+      parts as two separate path variables `{area_code}-{region_code}`.
+
+    parameters:
+      - $ref: '#/parameters/areaCode'
+      - $ref: '#/parameters/regionCode'
+
+    get:
+      summary: Retrieve List of Articles on a Market
+      description: Retrieve list of all articles for a particular market.
+      parameters:
+        - $ref: '#/parameters/offset'
+        - $ref: '#/parameters/limit'
+      responses:
+        200:
+          description: The list of articles
+          schema:
+            $ref: '#/definitions/marketArticles'
+
+        404:
+          description: The requested article wasn't found.
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /markets/{area_code}-{region_code}/articles/{article_id}:
+    x-summary: Market Article
+    parameters:
+      - $ref: '#/parameters/areaCode'
+      - $ref: '#/parameters/regionCode'
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Market Article
+      description: Retrieve a particular article on a market by its id.
+      responses:
+        200:
+          description: One Article
+          schema:
+            $ref: '#/definitions/article'
+
+  /markets/{area_code}-{region_code}/catalogue:
+    x-summary: Market Catalogue
+    parameters:
+      - $ref: '#/parameters/areaCode'
+      - $ref: '#/parameters/regionCode'
+
+    get:
+      summary: Retrieve Market Catalogue
+      description: Retrieve a particular market's catalogue by market region and area code.
+      responses:
+        200:
+          description: Market Catalogue
+          schema:
+            $ref: '#/definitions/catalogue'
+
+  /models/{model_id}/catalogue:
+    x-summary: Model Catalogue
+    parameters:
+      - name: model_id
+        in: path
+        description: Id of the Model
+        required: true
+        type: string
+        x-example: 'CDI16'
+
+    get:
+      summary: Retrieve Model Catalogue
+      description: Retrieve a particular model's catalogue by model number.
+      parameters:
+        - $ref: '#/parameters/acceptLanguageHeader'
+
+      responses:
+        200:
+          description: Model Catalogue
+          headers:
+            Content-Language:
+              type: string
+              default: en
+              x-example: en
+            Vary:
+              type: string
+              default: Accept-Language
+              x-example: Accept-Language
+          schema:
+            $ref: '#/definitions/catalogue'    
+
+#
+# Parameters Definitions
+#
+parameters:
+  # Article Id
+  articleId:
+    name: article_id
+    in: path
+    description: Id of the Article
+    required: true
+    type: string
+    x-example: 'BY3011'
+
+  # Market Area Code
+  areaCode:
+    name: area_code
+    in: path
+    description: Code of an area
+    required: true
+    type: string
+    x-example: 'area-code-1'
+
+  # Market Region Code
+  regionCode:
+    name: region_code
+    in: path
+    description: Code of a region
+    required: true
+    type: string
+    x-example: 'region-code-1'
+
+  # Marketing Channel
+  marketingChannel:
+    name: marketingChannel
+    in: query
+    description: Requested marketing channel
+    required: false
+    type: string
+    enum:
+      - ecom
+      - retail
+      - wholesale
+      - all
+    default: 'all'
+    x-example: 'ecom'
+
+  # adidas API guidelines: Pagination
+  offset:
+    name: offset
+    in: query
+    description: Number of results to skip from the start of the list
+    required: false
+    type: string
+    default: '0'
+    x-example: '10'
+
+  # adidas API guidelines: Pagination
+  limit:
+    name: limit
+    in: query
+    description: The maximum number of reusults to return
+    required: false
+    type: string
+    default: '10'
+    x-example: '5'
+
+  # adidas API guidelines: Sparse fieldset
+  fields:
+    name: fields
+    in: query
+    description: Comma-separated list of fields to include in the response
+    required: false
+    type: array
+    items:
+      type: string
+    collectionFormat: csv
+    x-example:
+      - articleNumber
+      - modelNumber
+
+  # adidas API guidelines:
+  acceptLanguageHeader:
+    name: 'Accept-Language'
+    in: header
+    type: string
+    default: en
+    x-example: en,en-US,fr;q=0.6
+
+#
+# Models Definitions
+#
+definitions:
+  #
+  # Article
+  #
+  articles:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+    properties:
+      resultCount:
+        type: number
+    example:
+      _links:
+        self:
+          href: /articles
+
+        next:
+          href: /articles?offset=5&limit=5
+
+        first:
+          href: /articles?offset=0&limit=5
+
+        last:
+          href: /articles?offset=40&limit=5
+
+      resultCount: 42
+
+      _embedded:
+        article:
+          - $ref: '#/definitions/article/example'
+  article:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+
+    properties:
+      articleNumber:
+        type: string
+      modelNumber:
+        type: string
+      articleDescription:
+        type: string
+      modelDescription:
+        type: string
+        description: |
+          The model desription contains the name of the product. Often it 
+          includes the following elements: purpose (sports category, gender, age
+           group), form (product type, silhouette), presentation (graphics), 
+           royalty information (club, league) and benefits (technology/marketing
+            concept). Due the limited size of the description, those elements 
+          might be abbreviated.
+        example: COPA MUNDIAL
+
+    required:
+      - articleNumber
+      - modelNumber
+      - articleDescription
+
+    example:
+      _links:
+        self:
+          href: /articles/BY3011
+
+        assets:
+          href: /articles/BY3011/assets
+
+        variants:
+          href: /articles/BY3011/variants
+
+        prices:
+          href: /articles/BY3011/prices
+
+        catalogue:
+          href: /articles/BY3011/catalogue
+
+        relatedProducts:
+          - href: /articles/BY3041
+          - href: /articles/BY3042
+
+      articleNumber: BY3011
+      modelNumber: CDI16
+      articleDescription: NMD_C2
+      modelDescription: COPA MUNDIAL
+
+  articleNotFoundError:
+    type: object
+    allOf:
+      - $ref: '#/definitions/problemDetail'
+    example:
+      title: 'Not Found'
+      detail: 'Cannot find the requested article'
+      status: 404
+      instance: '/articles/1234'
+
+  #
+  # Article Assets
+  #
+  assets:
+    type: object
+
+    allOf:
+      - $ref: '#/definitions/halResource'
+
+    properties:
+      assetsCount:
+        type: number
+      assets:
+        type: array
+        items:
+          - $ref: '#/definitions/asset'
+
+    example:
+      _links:
+        self:
+          href: /articles/BY3011/assets
+
+      assetsCount: 2
+      assets:
+        - _links:
+            content:
+              href: /path/to/cdn/image.png
+          assetType: image
+          mediaType: image/png
+
+        - _links:
+            content:
+              href: /path/to/cdn/video.mpeg
+          assetType: video
+          mediaType: video/mpeg4
+
+  asset:
+    type: object
+
+    allOf:
+      - $ref: '#/definitions/halResource'
+
+    properties:
+      assetType:
+        type: string
+        enum: [image, video]
+
+  #
+  # Article Variations
+  #
+  variants:
+    type: object
+
+  variant:
+    type: object
+
+  #
+  # Article Prices
+  #
+  prices:
+    type: object
+
+  price:
+    type: object
+
+  #
+  # Market
+  #
+  market:
+    type: object
+
+  marketNotFoundError:
+    type: object
+    allOf:
+      - $ref: '#/definitions/problemDetail'
+    example:
+      title: 'Not Found'
+      detail: 'Cannot find the requested market'
+      status: 404
+      instance: '/markets/areacode-regioncode'
+
+  marketArticles:
+    type: object
+
+  #
+  # Catalogue
+  #
+  catalogues:
+    type: object
+
+  catalogue:
+    type: object
+
+  #
+  # -- DO NOT EDIT BEYOND THIS POINT --
+  #
+
+  # Media Types Definitions
+
+  #
+  # application/problem+json
+  #
+  problemDetail:
+    type: object
+    properties:
+      type:
+        type: string
+      title:
+        type: string
+      status:
+        type: number
+      detail:
+        type: string
+      instance:
+        type: string
+    required:
+      - title
+      - detail
+
+  #
+  # application/hal+json defintion
+  #
+  halLinkObject:
+    type: object
+    required:
+      - href
+    properties:
+      href:
+        type: string
+      templated:
+        type: boolean
+      type:
+        type: string
+      deprecation:
+        type: string
+      name:
+        type: string
+      profile:
+        type: string
+      title:
+        type: string
+      hreflang:
+        type: string
+
+  halCuriesLink:
+    title: HAL Curies Link
+    allOf:
+      - type: object
+        properties:
+          templated:
+            enum:
+              - true
+        required:
+          - templated
+      - $ref: '#/definitions/halLinkObject'
+
+  halResource:
+    title: HAL Resource Object
+    type: object
+    properties:
+      _links:
+        type: object
+        additionalProperties:
+          # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
+          allOf:
+            - $ref: '#/definitions/halLinkObject'
+            - type: array
+              items:
+                - $ref: '#/definitions/halLinkObject'
+        properties:
+          curies:
+            # WARN: Should be "anyOf" but "anyOf" isn't supported in Swagger 2.0
+            allOf:
+              - $ref: '#/definitions/halCuriesLink'
+              - type: array
+                items:
+                  - $ref: '#/definitions/halCuriesLink'
+      _embedded:
+        type: object
+        additionalProperties: true
+        # WARN: Apiary doesn't support circular references
+        # additionalProperties:
+        #   anyOf:
+        #     - $ref: '#/definitions/hal_resource'
+        #     - type: array
+        #       items:
+        #         - $ref: '#/definitions/hal_resource'
