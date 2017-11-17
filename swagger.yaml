@@ -3,12 +3,15 @@ info:
   version: '1.0.0'
   title: "[Draft] Product Service API"
   description: |
-    Draft of a new Poduct API for outbound integration.
-    
-    --- 
-
     **FOR FURTHER DISCUSSION**
 
+    ---
+    
+    Draft of a new Poduct API for outbound integration.
+
+    To propose a change, head over to [GitHub repository](https://github.com/adidas-group/product-service-api), 
+    create a new branch with proposed change and open a [pull request](https://help.github.com/articles/about-pull-requests/).
+  
     ## Article information levels
     Article information are provided on three levels:
 
@@ -55,10 +58,10 @@ security:
 
 paths:
   /:
-    x-summary: API Root
+    x-summary: Product Service API
 
     get:
-      summary: Retrieve API Root
+      summary: Retrieve Product Service API Root
       description: Retrieve available top-level actions of the Product Service API
       responses:
         200:
