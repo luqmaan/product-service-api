@@ -6,26 +6,29 @@ info:
     **FOR FURTHER DISCUSSION**
 
     ---
-    
+
     Draft of a new Poduct API for outbound integration.
 
-    To propose a change, head over to [GitHub repository](https://github.com/adidas-group/product-service-api), 
+    To propose a change, head over to [GitHub repository](https://github.com/adidas-group/product-service-api),
     create a new branch with proposed change and open a [pull request](https://help.github.com/articles/about-pull-requests/).
-  
+
     ## Article information levels
     Article information are provided on the following levels:
 
-    1. Global-level
-    1. Market-level (seasonal)
+    1. Global
+    1. Market-specific (seasonal)
+
+    Where applicable seasonal information might be retrieved using the optional
+    `season` parameter. When no `season` parameter is provided the current
+    season is returned.
 
     ## Catalogue information levels
     Catalogue information are provided on the following levels:
 
-    1. Model-level
-        1. Global
-        2. Market-level
-    1. Article-level
-  
+    1. Model-specific
+        1. Global (seasonal)
+        2. Market-specific (seasonal)
+    1. Article-specific (seasonal)
 
     ## Marketing Channels
     Furthermore, there are three marketing channels (domains):
@@ -40,7 +43,7 @@ info:
     ## Language Variants
     Where applicable, product information support standard [HTTP Language Variants
     negotiation](https://adidas-group.gitbooks.io/api-guidelines/content/execution/localization.html)
-    using the `Accept-Language` HTTP Header. 
+    using the `Accept-Language` HTTP Header.
 
 produces:
   - application/hal+json      # Representation message format
@@ -85,8 +88,8 @@ paths:
                   href: /markets/{area_code}-{region_code}/articles
                 marketArticle:
                   href: /markets/{area_code}-{region_code}/articles/{article_id}
-                marketCatalogue:
-                  href: /markets/{area_code}-{region_code}/catalogue
+                marketModelCatalogue:
+                  href: /markets/{area_code}-{region_code}/models/{model_id}/catalogue
                 modelCatalogue:
                   href: /models/{model_id}/catalogue
 
@@ -107,6 +110,7 @@ paths:
 
   /articles/{article_id}:
     x-summary: Article
+    x-description: Global article infromation.
     parameters:
       - $ref: '#/parameters/articleId'
       - $ref: '#/parameters/marketingChannel'
@@ -202,8 +206,10 @@ paths:
 
   /articles/{article_id}/catalogue:
     x-summary: Article Catalogue
+    x-description: Article-specific catalogue information
     parameters:
       - $ref: '#/parameters/articleId'
+      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve Article Catalogue
@@ -217,24 +223,27 @@ paths:
   /markets/{area_code}-{region_code}/articles:
     x-summary: Market Articles
     x-description: |
-      Articles specific to a market.
+      Market-specific articles information.
 
       ---
 
-      **Designer's Note**: As the market identifier is a compoud variable 
-      consisting of area and region code we should use the comma (`,`) and 
-      semi-colon (`;`) to indicate to "indicate nonhierarchical portions of the 
-      URI" e.g.: `/markets;are=52,region=111` however this isn't supported in 
-      Swagger 2.0 and as such the recommended work-around is to combine the two 
+      **Designer's Note**: As the market identifier is a compoud variable
+      consisting of area and region code we should use the comma (`,`) and
+      semi-colon (`;`) to indicate to "indicate nonhierarchical portions of the
+      URI" e.g.: `/markets;are=52,region=111` however this isn't supported in
+      Swagger 2.0 and as such the recommended work-around is to combine the two
       parts as two separate path variables `{area_code}-{region_code}`.
 
     parameters:
       - $ref: '#/parameters/areaCode'
       - $ref: '#/parameters/regionCode'
+      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve List of Articles on a Market
-      description: Retrieve list of all articles for a particular market.
+      description: |
+        Retrieve list of every article information specific to a particular 
+        market.
       parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
@@ -245,7 +254,7 @@ paths:
             $ref: '#/definitions/marketArticles'
 
         404:
-          description: The requested article wasn't found.
+          description: The requested market wasn't found.
           headers:
             Content-Type:
               type: string
@@ -255,25 +264,31 @@ paths:
 
   /markets/{area_code}-{region_code}/articles/{article_id}:
     x-summary: Market Article
+    x-description: Market-specific Article information.
     parameters:
       - $ref: '#/parameters/areaCode'
       - $ref: '#/parameters/regionCode'
       - $ref: '#/parameters/articleId'
+      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve Market Article
-      description: Retrieve a particular article on a market by its id.
+      description: |
+        Retrieve market-specific information for a particular article.
       responses:
         200:
           description: One Article
           schema:
             $ref: '#/definitions/article'
 
-  /markets/{area_code}-{region_code}/catalogue:
+  /markets/{area_code}-{region_code}/models/{model_id}/catalogue:
     x-summary: Market Catalogue
+    x-description: Market-level model catalogue information.
     parameters:
       - $ref: '#/parameters/areaCode'
       - $ref: '#/parameters/regionCode'
+      - $ref: '#/parameters/modelId'
+      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve Market Catalogue
@@ -286,13 +301,10 @@ paths:
 
   /models/{model_id}/catalogue:
     x-summary: Model Catalogue
+    x-description: Global model catalogue information.
     parameters:
-      - name: model_id
-        in: path
-        description: Id of the Model
-        required: true
-        type: string
-        x-example: 'CDI16'
+      - $ref: '#/parameters/modelId'
+      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve Model Catalogue
@@ -313,7 +325,7 @@ paths:
               default: Accept-Language
               x-example: Accept-Language
           schema:
-            $ref: '#/definitions/catalogue'    
+            $ref: '#/definitions/catalogue'
 
 #
 # Parameters Definitions
@@ -327,6 +339,14 @@ parameters:
     required: true
     type: string
     x-example: 'BY3011'
+
+  modelId:
+    name: model_id
+    in: path
+    description: Id of the Model
+    required: true
+    type: string
+    x-example: 'CDI16'
 
   # Market Area Code
   areaCode:
@@ -360,6 +380,15 @@ parameters:
       - all
     default: 'all'
     x-example: 'ecom'
+
+  # Season filter
+  season:
+    name: season
+    in: query
+    description: Filter results based on the defined season-name (SS14, FW14)
+    type: string
+    default: 'current' # TODO: Current season, identifier
+    x-example: 'SS17'
 
   # adidas API guidelines: Pagination
   offset:
@@ -451,11 +480,11 @@ definitions:
       modelDescription:
         type: string
         description: |
-          The model desription contains the name of the product. Often it 
+          The model desription contains the name of the product. Often it
           includes the following elements: purpose (sports category, gender, age
-           group), form (product type, silhouette), presentation (graphics), 
+           group), form (product type, silhouette), presentation (graphics),
            royalty information (club, league) and benefits (technology/marketing
-            concept). Due the limited size of the description, those elements 
+            concept). Due the limited size of the description, those elements
           might be abbreviated.
         example: COPA MUNDIAL
 
