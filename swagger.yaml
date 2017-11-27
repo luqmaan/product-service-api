@@ -95,6 +95,7 @@ paths:
 
   /articles:
     x-summary: Articles
+    x-description: Global articles information.
 
     get:
       summary: Retrieve List of Articles
@@ -137,6 +138,7 @@ paths:
 
   /articles/{article_id}/assets:
     x-summary: Article Assets
+    x-description: Global articles assets.
     parameters:
       - $ref: '#/parameters/articleId'
 
@@ -160,6 +162,7 @@ paths:
 
   /articles/{article_id}/variants:
     x-summary: Article Variants
+    x-description: Global articles variants.
     parameters:
       - $ref: '#/parameters/articleId'
 
@@ -183,6 +186,7 @@ paths:
 
   /articles/{article_id}/prices:
     x-summary: Article Prices
+    x-description: Global articles prices.    
     parameters:
       - $ref: '#/parameters/articleId'
 
@@ -242,7 +246,7 @@ paths:
     get:
       summary: Retrieve List of Articles on a Market
       description: |
-        Retrieve list of every article information specific to a particular 
+        Get list of every article information specific to a particular 
         market.
       parameters:
         - $ref: '#/parameters/offset'
@@ -274,7 +278,7 @@ paths:
     get:
       summary: Retrieve Market Article
       description: |
-        Retrieve market-specific information for a particular article.
+        Get market-specific information for a particular article.
       responses:
         200:
           description: One Article
@@ -282,8 +286,8 @@ paths:
             $ref: '#/definitions/article'
 
   /markets/{area_code}-{region_code}/models/{model_id}/catalogue:
-    x-summary: Market Catalogue
-    x-description: Market-level model catalogue information.
+    x-summary: Market Model Catalogue
+    x-description: Market-specific model catalogue information.
     parameters:
       - $ref: '#/parameters/areaCode'
       - $ref: '#/parameters/regionCode'
@@ -292,7 +296,8 @@ paths:
 
     get:
       summary: Retrieve Market Catalogue
-      description: Retrieve a particular market's catalogue by market region and area code.
+      description: |
+        Get a particular market's catalogue by market region and area code.
       responses:
         200:
           description: Market Catalogue
@@ -308,7 +313,7 @@ paths:
 
     get:
       summary: Retrieve Model Catalogue
-      description: Retrieve a particular model's catalogue by model number.
+      description: Get a particular model's catalogue by model number.
       parameters:
         - $ref: '#/parameters/acceptLanguageHeader'
 
