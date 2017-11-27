@@ -82,17 +82,20 @@ paths:
                   href: /articles
                 article:
                   href: /articles/{article_id}
-                articleCatalogue:
-                  href: /articles/{article_id}/catalogue
                 marketArticles:
                   href: /markets/{area_code}-{region_code}/articles
                 marketArticle:
                   href: /markets/{area_code}-{region_code}/articles/{article_id}
-                marketModelCatalogue:
-                  href: /markets/{area_code}-{region_code}/models/{model_id}/catalogue
                 modelCatalogue:
                   href: /models/{model_id}/catalogue
+                marketModelCatalogue:
+                  href: /markets/{area_code}-{region_code}/models/{model_id}/catalogue
+                articleCatalogue:
+                  href: /articles/{article_id}/catalogue
 
+  #
+  # Article Information
+  #
   /articles:
     x-summary: Articles
     x-description: Global articles information.
@@ -186,7 +189,7 @@ paths:
 
   /articles/{article_id}/prices:
     x-summary: Article Prices
-    x-description: Global articles prices.    
+    x-description: Global articles prices.
     parameters:
       - $ref: '#/parameters/articleId'
 
@@ -207,22 +210,6 @@ paths:
               default: application/problem+json
           schema:
             $ref: '#/definitions/articleNotFoundError'
-
-  /articles/{article_id}/catalogue:
-    x-summary: Article Catalogue
-    x-description: Article-specific catalogue information
-    parameters:
-      - $ref: '#/parameters/articleId'
-      - $ref: '#/parameters/season'
-
-    get:
-      summary: Retrieve Article Catalogue
-      description: Retrieve a particular article's catalogue.
-      responses:
-        200:
-          description: Article Catalogue
-          schema:
-            $ref: '#/definitions/catalogue'
 
   /markets/{area_code}-{region_code}/articles:
     x-summary: Market Articles
@@ -246,7 +233,7 @@ paths:
     get:
       summary: Retrieve List of Articles on a Market
       description: |
-        Get list of every article information specific to a particular 
+        Get list of every article information specific to a particular
         market.
       parameters:
         - $ref: '#/parameters/offset'
@@ -285,25 +272,9 @@ paths:
           schema:
             $ref: '#/definitions/article'
 
-  /markets/{area_code}-{region_code}/models/{model_id}/catalogue:
-    x-summary: Market Model Catalogue
-    x-description: Market-specific model catalogue information.
-    parameters:
-      - $ref: '#/parameters/areaCode'
-      - $ref: '#/parameters/regionCode'
-      - $ref: '#/parameters/modelId'
-      - $ref: '#/parameters/season'
-
-    get:
-      summary: Retrieve Market Catalogue
-      description: |
-        Get a particular market's catalogue by market region and area code.
-      responses:
-        200:
-          description: Market Catalogue
-          schema:
-            $ref: '#/definitions/catalogue'
-
+  #
+  # Catalogue Information
+  #
   /models/{model_id}/catalogue:
     x-summary: Model Catalogue
     x-description: Global model catalogue information.
@@ -329,6 +300,41 @@ paths:
               type: string
               default: Accept-Language
               x-example: Accept-Language
+          schema:
+            $ref: '#/definitions/catalogue'
+
+  /markets/{area_code}-{region_code}/models/{model_id}/catalogue:
+    x-summary: Market Model Catalogue
+    x-description: Market-specific model catalogue information.
+    parameters:
+      - $ref: '#/parameters/areaCode'
+      - $ref: '#/parameters/regionCode'
+      - $ref: '#/parameters/modelId'
+      - $ref: '#/parameters/season'
+
+    get:
+      summary: Retrieve Market Model Catalogue
+      description: |
+        Get a particular model catalogue specific to a market.
+      responses:
+        200:
+          description: Market Catalogue
+          schema:
+            $ref: '#/definitions/catalogue'
+
+  /articles/{article_id}/catalogue:
+    x-summary: Article Catalogue
+    x-description: Article-specific catalogue information.
+    parameters:
+      - $ref: '#/parameters/articleId'
+      - $ref: '#/parameters/season'
+
+    get:
+      summary: Retrieve Article Catalogue
+      description: Retrieve a particular article's catalogue.
+      responses:
+        200:
+          description: Article Catalogue
           schema:
             $ref: '#/definitions/catalogue'
 
