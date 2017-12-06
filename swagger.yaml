@@ -592,6 +592,21 @@ definitions:
   #
   variants:
     type: object
+    allOf:
+      - $ref: '#/definitions/halResource'    
+    
+    properties:
+      variants:
+        type: array
+        items: 
+          - $ref: '#/definitions/variant'
+    
+    example:
+      _links:
+        self:
+          href: /articles/BY3011/variatns
+      variants: 
+        - $ref: '#/definitions/variant/example'
 
   variant:
     type: object
