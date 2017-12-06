@@ -72,5 +72,77 @@ definitions:
         stockAvailability:
           type: integer
       
-      
-    
+  #
+  # Asset
+  #
+  GlobalAsset:
+    type: object
+    properties:
+      assetType:
+        type: string
+        enum:
+          - image
+          - video
+          - other
+        example: image
+      viewGroup:
+        type: string
+        example: 3d
+      view:
+        type: string
+        example: standard
+      assetCategory:
+        type: string
+        example: Photography
+      usageTerms:
+        type: array
+        items:
+          - type: string
+            example: B2B Cataloguge
+      assetHref:
+        type: string
+        format: uri
+      image:
+        type: object
+        properties:
+          style:
+            type: string
+            example: On Model        
+          width:
+            type: integer
+            example: 2000
+          height:
+            type: integer
+            example: 2000
+          bgColor:
+            type: string
+            example: transparent
+          representation:
+            type: string
+      video:
+        type: object
+        properties:
+          fileSize:
+            type: integer
+            example: 17224902
+      model:
+        waist:
+          type: string
+          example: 58        
+        chest:
+          type: string
+          example: 97
+        height:
+          type: string
+          example: 197        
+        productSize:
+          type: string
+          example: 540
+    required:
+      - assetType
+      - viewGroup
+      - view
+      - assetCategory
+      - usageTerms
+      - assetHref
+
