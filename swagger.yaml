@@ -595,6 +595,43 @@ definitions:
 
   variant:
     type: object
+    properties:
+      EAN:
+        type: string
+        example: "4058026055128"
+      UPC:
+        type: string
+        example: "885591427616"
+      srcSizeCD3:
+        type: string
+        example: "380"
+      srcSizeScale:
+        type: string
+        example: "T4"
+      srcSizeDescription:
+        type: string
+      conversionIDs:
+        type: array
+        items: 
+          - type: object
+            properties:
+              localSize:
+                type: string
+              saleSizeConvID:
+                type: string
+                example: D
+              saleSizeScale:
+                type: string
+                example: 8C
+              saleSizeAbbr:
+                type: string
+                example: 27
+              saleSizeDesc:
+                type: string
+                example: 27
+    required:
+      - EAN
+      - UPC    
 
   #
   # Article Prices
