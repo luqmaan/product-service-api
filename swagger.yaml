@@ -631,7 +631,16 @@ definitions:
                 example: 27
     required:
       - EAN
-      - UPC    
+      - UPC
+    example:
+      EAN: "4058026055128"
+      UPC: "885591427616"
+      srcSizeCD3: "380"
+      srcSizeScale: "T4"
+      conversionIDs:
+        - saleSizeConvID: D
+          saleSizeScale: 8C
+          saleSizeAbbr: "27"
 
   #
   # Article Prices
