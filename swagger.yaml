@@ -604,7 +604,7 @@ definitions:
     example:
       _links:
         self:
-          href: /articles/BY3011/variatns
+          href: /articles/BY3011/variants
       variants: 
         - $ref: '#/definitions/variant/example'
 
