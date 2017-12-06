@@ -727,9 +727,78 @@ definitions:
   #
   prices:
     type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+    properties:
+      priceCount:
+        type: number
+      prices:
+        type: array
+        items:
+          - $ref: '#/definitions/price'
+    example:
+      _links:
+        self:
+          href: /articles/BY3011/prices
+      priceCount: 1
+      prices:
+        - $ref: '#/definitions/price/example'
 
   price:
     type: object
+    properties:
+      timePeriodCode: 
+        type: string
+        example: "71"
+      salesOrg:
+        type: string
+        example: "0681"
+      distChannel:
+        type: string
+        example: "01"
+      priceType:
+        type: string
+        example: "Act_SalesPrice"
+      currency:
+        type: string
+        example: "EUR"
+      validFrom:
+        type: string
+        format: date-time
+        example: "2017-01-01"
+      validTo:
+        type: string
+        format: date-time
+        example: "2017-12-31"
+      priceValue:
+        type: string
+        example: "74,98"
+      priceUnit:
+        type: string
+        example: "1"
+      countryCode:
+        type: string
+        example: "AT"
+    required:
+      - timePeriodCode
+      - salesOrg
+      - distChannel
+      - priceType
+      - currency
+      - validFrom
+      - validTo
+      - priceValue
+      - countryCode
+    example:
+      timePeriodCode: "71"
+      salesOrg: "0681"
+      distChannel: "01"
+      priceType: "Act_SalesPrice"
+      currency: "EUR"
+      validFrom: "2017-01-01"
+      validTo: "2017-12-31"
+      priceValue: "74,98"
+      countryCode: "AT"
 
   #
   # Market
