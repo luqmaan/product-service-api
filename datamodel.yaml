@@ -126,18 +126,20 @@ definitions:
             type: integer
             example: 17224902
       model:
-        waist:
-          type: string
-          example: 58        
-        chest:
-          type: string
-          example: 97
-        height:
-          type: string
-          example: 197        
-        productSize:
-          type: string
-          example: 540
+        type: object
+        properties:
+          waist:
+            type: string
+            example: 58        
+          chest:
+            type: string
+            example: 97
+          height:
+            type: string
+            example: 197        
+          productSize:
+            type: string
+            example: 540
     required:
       - assetType
       - viewGroup
@@ -145,4 +147,19 @@ definitions:
       - assetCategory
       - usageTerms
       - assetHref
-
+    example:
+      assetType: image
+      viewGroup: 3d
+      assetCategory: Photography
+      usageTerms: B2B Cataloguge
+      assetHref: http://domain.com/image.jpeg
+      image:
+        style: On Model
+        width: 2000
+        height: 2000
+        bgColor: transparent
+      model:
+        waist: 58
+        chest: 97
+        height: 197
+        productSize: 540

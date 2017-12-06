@@ -43,7 +43,7 @@ info:
     ## Season Information
     Where applicable seasonal information might be retrieved using the optional
     `season` parameter. When no `season` parameter is provided the current
-    season is returned.    
+    season is returned.
 
 produces:
   - application/hal+json      # Representation message format
@@ -545,47 +545,111 @@ definitions:
   #
   assets:
     type: object
-
     allOf:
       - $ref: '#/definitions/halResource'
-
     properties:
-      assetsCount:
+      assetCount:
         type: number
       assets:
         type: array
         items:
           - $ref: '#/definitions/asset'
-
     example:
       _links:
         self:
           href: /articles/BY3011/assets
-
-      assetsCount: 2
+      assetCount: 1
       assets:
-        - _links:
-            content:
-              href: /path/to/cdn/image.png
-          assetType: image
-          mediaType: image/png
-
-        - _links:
-            content:
-              href: /path/to/cdn/video.mpeg
-          assetType: video
-          mediaType: video/mpeg4
+        - $ref: '#/definitions/asset/example'
 
   asset:
     type: object
-
-    allOf:
-      - $ref: '#/definitions/halResource'
-
     properties:
       assetType:
         type: string
-        enum: [image, video]
+        enum:
+          - image
+          - video
+          - other
+        example: image
+      viewGroup:
+        type: string
+        example: 3d
+      view:
+        type: string
+        example: standard
+      assetCategory:
+        type: string
+        example: Photography
+      usageTerms:
+        type: array
+        items:
+          - type: string
+            example: B2B Cataloguge
+      assetHref:
+        type: string
+        format: uri
+      image:
+        type: object
+        properties:
+          style:
+            type: string
+            example: On Model
+          width:
+            type: integer
+            example: 2000
+          height:
+            type: integer
+            example: 2000
+          bgColor:
+            type: string
+            example: transparent
+          representation:
+            type: string
+      video:
+        type: object
+        properties:
+          fileSize:
+            type: integer
+            example: 17224902
+      model:
+        type: object
+        properties:
+          waist:
+            type: string
+            example: 58
+          chest:
+            type: string
+            example: 97
+          height:
+            type: string
+            example: 197
+          productSize:
+            type: string
+            example: 540
+    required:
+      - assetType
+      - viewGroup
+      - view
+      - assetCategory
+      - usageTerms
+      - assetHref
+    example:
+      assetType: image
+      viewGroup: 3d
+      assetCategory: Photography
+      usageTerms: B2B Cataloguge
+      assetHref: http://domain.com/image.jpeg
+      image:
+        style: On Model
+        width: 2000
+        height: 2000
+        bgColor: transparent
+      model:
+        waist: 58
+        chest: 97
+        height: 197
+        productSize: 540
 
   #
   # Article Variations
@@ -593,19 +657,20 @@ definitions:
   variants:
     type: object
     allOf:
-      - $ref: '#/definitions/halResource'    
-    
+      - $ref: '#/definitions/halResource'
     properties:
+      variantCount:
+        type: number
       variants:
         type: array
-        items: 
+        items:
           - $ref: '#/definitions/variant'
-    
     example:
       _links:
         self:
           href: /articles/BY3011/variants
-      variants: 
+      variantCount: 1
+      variants:
         - $ref: '#/definitions/variant/example'
 
   variant:
@@ -627,7 +692,7 @@ definitions:
         type: string
       conversionIDs:
         type: array
-        items: 
+        items:
           - type: object
             properties:
               localSize:
