@@ -349,7 +349,7 @@ parameters:
     description: Id of the Article
     required: true
     type: string
-    x-example: 'BY3011'
+    x-example: '015110'
 
   modelId:
     name: model_id
@@ -461,26 +461,44 @@ definitions:
       _links:
         self:
           href: /articles
-
         next:
           href: /articles?offset=5&limit=5
-
         first:
           href: /articles?offset=0&limit=5
-
         last:
           href: /articles?offset=40&limit=5
-
       resultCount: 42
-
       _embedded:
         article:
           - $ref: '#/definitions/article/example'
+
   article:
     type: object
     allOf:
       - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/articleSeasonal'
+    example:
+      _links:
+        self:
+          href: /articles/015110
+        assets:
+          href: /articles/015110/assets
+        variants:
+          href: /articles/015110/variants
+        prices:
+          href: /articles/015110/prices
+        catalogue:
+          href: /articles/015110/catalogue
+        relatedProducts:
+          - href: /articles/BY3041
+          - href: /articles/BY3042
+      $ref: '#/definitions/articleSeasonal/example'
 
+  #
+  # Article
+  #
+  articleSeasonal:
+    type: object
     properties:
       articleNumber:
         type: string
@@ -488,47 +506,124 @@ definitions:
         type: string
       articleDescription:
         type: string
-      modelDescription:
+        description: Always in english
+      genderCode:
         type: string
-        description: |
-          The model desription contains the name of the product. Often it
-          includes the following elements: purpose (sports category, gender, age
-           group), form (product type, silhouette), presentation (graphics),
-           royalty information (club, league) and benefits (technology/marketing
-            concept). Due the limited size of the description, those elements
-          might be abbreviated.
-        example: COPA MUNDIAL
-
-    required:
-      - articleNumber
-      - modelNumber
-      - articleDescription
-
+      genderDescription:
+        type: string
+      brandCode:
+        type: string
+      brandDescription:
+        type: string
+      productTypeCode:
+        type: string
+      productTypeDescription:
+        type: string
+      colorwayName:
+        type: string
+      colorwayDescription:
+        type: string
+        description: Is it short description or long - both? English only
+      ageGroupCode:
+        type: string
+      ageGroupDescription:
+        type: string
+      season:
+        type: object
+        description: Sesonal article attributes
+        properties:
+          carryOver:
+            type: boolean
+          retailIntroDate:
+            type: string
+            format: date-time
+          retailExitDate:
+            type: string
+            format: date-time
+      colors:
+        type: array
+        description: Array of article colors, language-specific
+        items:
+          $ref: '#/definitions/Color'
     example:
-      _links:
-        self:
-          href: /articles/BY3011
+      articleNumber: "015110"
+      modelNumber: "10034"
+      articleDescription: "COPA MUNDIAL"
+      genderCode: "M"
+      genderDescription: "MALE"
+      brandCode: "11"
+      brandDescription: "ADIDAS"
+      productTypeCode: "104"
+      productTypeDescription: "FOOTBALL SHOES (FIRM GROUND)"
+      colorwayName: "FTWR WHITE/BLACK"
+      colorwayDescription: "BLABAS/GRAFIT/BLABAS"
+      ageGroupCode: "A"
+      ageGroupDescription: "ADULT"
+      season:
+        carryOver: false
+        retailIntroDate: "2017-06-01"
+        retailExitDate: "2017-11-30"
 
-        assets:
-          href: /articles/BY3011/assets
+  #
+  # eCommerce Article
+  #
+  ecomArticleSeasonal:
+    type: object
+    allOf:
+      - $ref: '#/definitions/articleSeasonal'
+    properties:
+      preOrder:
+        type: boolean
+      personalizable:
+        type: boolean
+      hypeProduct:
+        type: boolean
+      flashProduct:
+        type: boolean
+      soldOut:
+        type: boolean
+      onlineFrom:
+        type: string
+        format: date-time        
+      onlineTo:
+        type: string
+        format: date-time
 
-        variants:
-          href: /articles/BY3011/variants
-
-        prices:
-          href: /articles/BY3011/prices
-
-        catalogue:
-          href: /articles/BY3011/catalogue
-
-        relatedProducts:
-          - href: /articles/BY3041
-          - href: /articles/BY3042
-
-      articleNumber: BY3011
-      modelNumber: CDI16
-      articleDescription: NMD_C2
-      modelDescription: COPA MUNDIAL
+  #
+  # Color
+  #
+  Color:
+    type: object
+    properties:
+      color1Code:
+        type: string
+      color1Description:
+        type: string
+        description: Language-dependent
+      color2Code:
+        type: string
+      color2Description:
+        type: string
+        description: Language-dependent
+      color3Code:
+        type: string
+      color3Description:
+        type: string
+        description: Language-dependent
+      color4Code:
+        type: string
+      color4Description:
+        type: string
+        description: Language-dependent
+    example:
+      color1Code: "A0QM"
+      color1Description: "core black"
+      color2Code: "A98B"
+      color2Description: "utility black"
+      color3Code: "A0QM"
+      color3Description: "core black"
+      color4Code: "01F7"
+      color4Description: "ftwr white"
 
   articleNotFoundError:
     type: object
@@ -557,7 +652,7 @@ definitions:
     example:
       _links:
         self:
-          href: /articles/BY3011/assets
+          href: /articles/015110/assets
       assetCount: 1
       assets:
         - $ref: '#/definitions/asset/example'
@@ -668,7 +763,7 @@ definitions:
     example:
       _links:
         self:
-          href: /articles/BY3011/variants
+          href: /articles/015110/variants
       variantCount: 1
       variants:
         - $ref: '#/definitions/variant/example'
@@ -739,7 +834,7 @@ definitions:
     example:
       _links:
         self:
-          href: /articles/BY3011/prices
+          href: /articles/015110/prices
       priceCount: 1
       prices:
         - $ref: '#/definitions/price/example'

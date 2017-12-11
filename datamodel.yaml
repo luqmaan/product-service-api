@@ -1,53 +1,167 @@
 definitions:
+
+  #
+  # Article
+  #
+  ArticleSeasonal:
+    type: object
+    properties:
+      articleNumber:
+        type: string
+      modelNumber:
+        type: string
+      articleDescription:
+        type: string
+        description: Always in english
+      genderCode:
+        type: string
+      genderDescription:
+        type: string
+      brandCode:
+        type: string
+      brandDescription:
+        type: string
+      productTypeCode:
+        type: string
+      productTypeDescription:
+        type: string
+      colorwayName:
+        type: string
+      colorwayDescription:
+        type: string
+        description: Is it short description or long - both? English only
+      ageGroupCode:
+        type: string
+      ageGroupDescription:
+        type: string
+      season:
+        type: object
+        description: Sesonal article attributes
+        properties:
+          carryOver:
+            type: boolean
+          retailIntroDate:
+            type: string
+            format: date-time
+          retailExitDate:
+            type: string
+            format: date-time
+      colors:
+        type: array
+        description: Array of article colors, language-specific
+        items:
+          $ref: '#/definitions/Color'
+    example:
+      articleNumber: "015110"
+      modelNumber: "10034"
+      articleDescription: "COPA MUNDIAL"
+      genderCode: "M"
+      genderDescription: "MALE"
+      brandCode: "11"
+      brandDescription: "ADIDAS"
+      productTypeCode: "104"
+      productTypeDescription: "FOOTBALL SHOES (FIRM GROUND)"
+      colorwayName: "FTWR WHITE/BLACK"
+      colorwayDescription: "BLABAS/GRAFIT/BLABAS"
+      ageGroupCode: "A"
+      ageGroupDescription: "ADULT"
+      season:
+        carryOver: false
+        retailIntroDate: "2017-06-01"
+        retailExitDate: "2017-11-30"
+
+  #
+  # eCommerce Article
+  #
+  EcomArticleSeasonal:
+    type: object
+    allOf:
+      - $ref: '#/definitions/ArticleSeasonal'
+    properties:
+      preOrder:
+        type: boolean
+      personalizable:
+        type: boolean
+      hypeProduct:
+        type: boolean
+      flashProduct:
+        type: boolean
+      soldOut:
+        type: boolean
+      onlineFrom:
+        type: string
+        format: date-time        
+      onlineTo:
+        type: string
+        format: date-time
+
+  #
+  # Color
+  #
+  Color:
+    type: object
+    properties:
+      color1Code:
+        type: string
+      color1Description:
+        type: string
+        description: Language-dependent
+      color2Code:
+        type: string
+      color2Description:
+        type: string
+        description: Language-dependent
+      color3Code:
+        type: string
+      color3Description:
+        type: string
+        description: Language-dependent
+      color4Code:
+        type: string
+      color4Description:
+        type: string
+        description: Language-dependent
+    example:
+      color1Code: "A0QM"
+      color1Description: "core black"
+      color2Code: "A98B"
+      color2Description: "utility black"
+      color3Code: "A0QM"
+      color3Description: "core black"
+      color4Code: "01F7"
+      color4Description: "ftwr white"
+
   #
   # SKU
   #
-  PIMGlobalSKU:
-    type: object
-    properties:
-      SKUNumber: {}
-      sourcingSizeCode3: {}
-      EAN: {}
-      UPC: {}
-      feasibleIndicator: {}
-      SKUActiveIndicator: {}
-
   GlobalSKU:
     type: object
     properties:
       EAN:
         type: string
-        example: "4058026055128"
       UPC:
         type: string
-        example: "885591427616"
       srcSizeCD3:
         type: string
-        example: "380"
       srcSizeScale:
         type: string
-        example: "T4"
       srcSizeDescription:
         type: string
       conversionIDs:
         type: array
-        items: 
+        items:
           - type: object
             properties:
               localSize:
                 type: string
               saleSizeConvID:
                 type: string
-                example: D
               saleSizeScale:
                 type: string
-                example: 8C
               saleSizeAbbr:
                 type: string
-                example: 27
               saleSizeDesc:
                 type: string
-                example: 27
     required:
       - EAN
       - UPC
@@ -71,7 +185,7 @@ definitions:
           format: date-time
         stockAvailability:
           type: integer
-      
+
   #
   # Asset
   #
@@ -84,21 +198,16 @@ definitions:
           - image
           - video
           - other
-        example: image
       viewGroup:
         type: string
-        example: 3d
       view:
         type: string
-        example: standard
       assetCategory:
         type: string
-        example: Photography
       usageTerms:
         type: array
         items:
           - type: string
-            example: B2B Cataloguge
       assetHref:
         type: string
         format: uri
@@ -107,16 +216,12 @@ definitions:
         properties:
           style:
             type: string
-            example: On Model        
           width:
             type: integer
-            example: 2000
           height:
             type: integer
-            example: 2000
           bgColor:
             type: string
-            example: transparent
           representation:
             type: string
       video:
@@ -124,22 +229,17 @@ definitions:
         properties:
           fileSize:
             type: integer
-            example: 17224902
       model:
         type: object
         properties:
           waist:
             type: string
-            example: 58        
           chest:
             type: string
-            example: 97
           height:
             type: string
-            example: 197        
           productSize:
             type: string
-            example: 540
     required:
       - assetType
       - viewGroup
@@ -170,38 +270,28 @@ definitions:
   Price:
     type: object
     properties:
-      timePeriodCode: 
+      timePeriodCode:
         type: string
-        example: "71"
       salesOrg:
         type: string
-        example: "0681"
       distChannel:
         type: string
-        example: "01"
       priceType:
         type: string
-        example: "Act_SalesPrice"
       currency:
         type: string
-        example: "EUR"
       validFrom:
         type: string
         format: date-time
-        example: "2017-01-01"
       validTo:
         type: string
-        format: date-time
-        example: "2017-12-31"
+        format: date-time"
       priceValue:
         type: string
-        example: "74,98"
       priceUnit:
         type: string
-        example: "1"
       countryCode:
         type: string
-        example: "AT"
     required:
       - timePeriodCode
       - salesOrg
