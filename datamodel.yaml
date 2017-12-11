@@ -3,7 +3,7 @@ definitions:
   #
   # Article
   #
-  ArticleSeasonal:
+  articleSeasonal:
     type: object
     properties:
       articleNumber:
@@ -50,7 +50,7 @@ definitions:
         type: array
         description: Array of article colors, language-specific
         items:
-          $ref: '#/definitions/Color'
+          $ref: '#/definitions/color'
     example:
       articleNumber: "015110"
       modelNumber: "10034"
@@ -69,14 +69,16 @@ definitions:
         carryOver: false
         retailIntroDate: "2017-06-01"
         retailExitDate: "2017-11-30"
+      colors:
+        - $ref: '#/definitions/color/example'
 
   #
   # eCommerce Article
   #
-  EcomArticleSeasonal:
+  ecomArticleSeasonal:
     type: object
     allOf:
-      - $ref: '#/definitions/ArticleSeasonal'
+      - $ref: '#/definitions/articleSeasonal'
     properties:
       preOrder:
         type: boolean
@@ -98,7 +100,7 @@ definitions:
   #
   # Color
   #
-  Color:
+  color:
     type: object
     properties:
       color1Code:
