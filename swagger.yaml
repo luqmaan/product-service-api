@@ -16,14 +16,15 @@ info:
     Article information are provided on the following levels:
 
     1. Global
-    1. Market-specific (seasonal)
+    1. Market-specific
+
     ## Catalogue Information Levels
     Catalogue information are provided on the following levels:
 
     1. Model-specific
-        1. Global (seasonal)
-        2. Market-specific (seasonal)
-    1. Article-specific (seasonal)
+        1. Global
+        2. Market-specific
+    1. Article-specific
 
     ## Marketing Channels
     Furthermore, there are three marketing channels (domains):
@@ -163,23 +164,23 @@ paths:
           schema:
             $ref: '#/definitions/articleNotFoundError'
 
-  /articles/{article_id}/variants:
-    x-summary: Article Variants
-    x-description: Global articles variants.
+  /articles/{article_id}/skus:
+    x-summary: Article SKUs
+    x-description: Global articles SKUs.
     parameters:
       - $ref: '#/parameters/articleId'
 
     get:
-      summary: Retrieve Article Variants
-      description: Retrieve all variants for a particular article.
+      summary: Retrieve Article SKUs
+      description: Retrieve all SKUs for a particular article.
       responses:
         200:
-          description: Variants for an Article
+          description: SKUs for an Article
           schema:
-            $ref: '#/definitions/variants'
+            $ref: '#/definitions/SKUs'
 
         404:
-          description: Variants for the given article weren't found.
+          description: SKUs for the given article weren't found.
           headers:
             Content-Type:
               type: string
@@ -351,13 +352,14 @@ parameters:
     type: string
     x-example: '015110'
 
+  # Model Id
   modelId:
     name: model_id
     in: path
     description: Id of the Model
     required: true
     type: string
-    x-example: 'CDI16'
+    x-example: '10034'
 
   # Market Area Code
   areaCode:
@@ -388,8 +390,8 @@ parameters:
       - ecom
       - retail
       - wholesale
-      - all
-    default: 'all'
+      - global
+    default: 'global'
     x-example: 'ecom'
 
   # Season filter
@@ -467,7 +469,7 @@ definitions:
           href: /articles?offset=0&limit=5
         last:
           href: /articles?offset=40&limit=5
-      resultCount: 42
+      resultCount: 1
       _embedded:
         article:
           - $ref: '#/definitions/article/example'
@@ -483,8 +485,8 @@ definitions:
           href: /articles/015110
         assets:
           href: /articles/015110/assets
-        variants:
-          href: /articles/015110/variants
+        skus:
+          href: /articles/015110/skus
         prices:
           href: /articles/015110/prices
         catalogue:
@@ -751,40 +753,41 @@ definitions:
   #
   # Article Variations
   #
-  variants:
+  SKUs:
     type: object
     allOf:
       - $ref: '#/definitions/halResource'
     properties:
-      variantCount:
+      skuCount:
         type: number
-      variants:
+      skus:
         type: array
         items:
-          - $ref: '#/definitions/variant'
+          - $ref: '#/definitions/SKU'
     example:
       _links:
         self:
-          href: /articles/015110/variants
-      variantCount: 1
-      variants:
-        - $ref: '#/definitions/variant/example'
+          href: /articles/015110/skus
+      skuCount: 1
+      skus:
+        - $ref: '#/definitions/SKU/example'
 
-  variant:
+  #
+  # SKU
+  #
+  SKU:
     type: object
     properties:
       EAN:
         type: string
-        example: "4058026055128"
+        description: Available in the 1st iteration
       UPC:
         type: string
-        example: "885591427616"
+        description: Available in the 1st iteration        
       srcSizeCD3:
         type: string
-        example: "380"
       srcSizeScale:
         type: string
-        example: "T4"
       srcSizeDescription:
         type: string
       conversionIDs:
@@ -796,19 +799,12 @@ definitions:
                 type: string
               saleSizeConvID:
                 type: string
-                example: D
               saleSizeScale:
                 type: string
-                example: 8C
               saleSizeAbbr:
                 type: string
-                example: 27
               saleSizeDesc:
                 type: string
-                example: 27
-    required:
-      - EAN
-      - UPC
     example:
       EAN: "4058026055128"
       UPC: "885591427616"
@@ -818,6 +814,22 @@ definitions:
         - saleSizeConvID: D
           saleSizeScale: 8C
           saleSizeAbbr: "27"
+
+  #
+  # eCommerce SKU
+  #
+  ecomSKU:
+    type: object
+    allOf:
+      - $ref: '#/definitions/articleSeasonal'
+    properties:
+      ecomDisplaySize:
+        type: string
+      ecomRetailInStock:
+        type: string
+        format: date-time
+      stockAvailability:
+        type: integer
 
   #
   # Article Prices
@@ -841,51 +853,34 @@ definitions:
       prices:
         - $ref: '#/definitions/price/example'
 
+  #
+  # Price
+  #
   price:
     type: object
     properties:
-      timePeriodCode: 
+      timePeriodCode:
         type: string
-        example: "71"
       salesOrg:
         type: string
-        example: "0681"
       distChannel:
         type: string
-        example: "01"
       priceType:
         type: string
-        example: "Act_SalesPrice"
       currency:
         type: string
-        example: "EUR"
       validFrom:
         type: string
         format: date-time
-        example: "2017-01-01"
       validTo:
         type: string
-        format: date-time
-        example: "2017-12-31"
+        format: date-time"
       priceValue:
         type: string
-        example: "74,98"
       priceUnit:
         type: string
-        example: "1"
       countryCode:
         type: string
-        example: "AT"
-    required:
-      - timePeriodCode
-      - salesOrg
-      - distChannel
-      - priceType
-      - currency
-      - validFrom
-      - validTo
-      - priceValue
-      - countryCode
     example:
       timePeriodCode: "71"
       salesOrg: "0681"

@@ -133,91 +133,45 @@ definitions:
       color4Code: "01F7"
       color4Description: "ftwr white"
 
-  #
-  # SKU
-  #
-  GlobalSKU:
-    type: object
-    properties:
-      EAN:
-        type: string
-      UPC:
-        type: string
-      srcSizeCD3:
-        type: string
-      srcSizeScale:
-        type: string
-      srcSizeDescription:
-        type: string
-      conversionIDs:
-        type: array
-        items:
-          - type: object
-            properties:
-              localSize:
-                type: string
-              saleSizeConvID:
-                type: string
-              saleSizeScale:
-                type: string
-              saleSizeAbbr:
-                type: string
-              saleSizeDesc:
-                type: string
-    required:
-      - EAN
-      - UPC
-    example:
-      EAN: "4058026055128"
-      UPC: "885591427616"
-      srcSizeCD3: "380"
-      srcSizeScale: "T4"
-      conversionIDs:
-        - saleSizeConvID: D
-          saleSizeScale: 8C
-          saleSizeAbbr: "27"
 
-    EcomCountrySKU:
-      type: object
-      properties:
-        ecomDisplaySize:
-          type: string
-        ecomRetailInStock:
-          type: string
-          format: date-time
-        stockAvailability:
-          type: integer
 
   #
   # Asset
   #
-  GlobalAsset:
+  asset:
     type: object
     properties:
       assetType:
         type: string
+        description: Available in the 1st iteration
         enum:
           - image
           - video
           - other
       viewGroup:
         type: string
+        description: Available in the 1st iteration
       view:
         type: string
+        description: Available in the 1st iteration
       assetCategory:
         type: string
+        description: Available in the 1st iteration
       usageTerms:
         type: array
+        description: Available in the 1st iteration
         items:
           - type: string
       assetHref:
         type: string
+        description: Available in the 1st iteration
         format: uri
       image:
         type: object
         properties:
           style:
             type: string
+            description: Available in the 1st iteration
           width:
             type: integer
           height:
@@ -266,52 +220,4 @@ definitions:
         height: 197
         productSize: 540
 
-  #
-  # Price
-  #
-  Price:
-    type: object
-    properties:
-      timePeriodCode:
-        type: string
-      salesOrg:
-        type: string
-      distChannel:
-        type: string
-      priceType:
-        type: string
-      currency:
-        type: string
-      validFrom:
-        type: string
-        format: date-time
-      validTo:
-        type: string
-        format: date-time"
-      priceValue:
-        type: string
-      priceUnit:
-        type: string
-      countryCode:
-        type: string
-    required:
-      - timePeriodCode
-      - salesOrg
-      - distChannel
-      - priceType
-      - currency
-      - validFrom
-      - validTo
-      - priceValue
-      - countryCode
-    example:
-      timePeriodCode: "71"
-      salesOrg: "0681"
-      distChannel: "01"
-      priceType: "Act_SalesPrice"
-      currency: "EUR"
-      validFrom: "2017-01-01"
-      validTo: "2017-12-31"
-      priceValue: "74,98"
-      countryCode: "AT"
 
