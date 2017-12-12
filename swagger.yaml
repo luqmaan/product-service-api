@@ -387,7 +387,7 @@ parameters:
     name: area_code
     in: query
     description: Code of an area
-    required: true
+    required: false
     type: string
     x-example: 'A1'
 
@@ -396,7 +396,7 @@ parameters:
     name: region_code
     in: query
     description: Code of a region
-    required: true
+    required: false
     type: string
     x-example: '50'
 
@@ -953,8 +953,26 @@ definitions:
     
   catalogue:
     type: object
+    properties:
+      catalogueLanguage:
+        type: object
+        $ref: '#/definitions/catalogueLanguage'
+      featureAndBenefits:
+        type: array
+        items:
+          - $ref: '#/definitions/featureAndBenefit'
     example:
-      a: 1
+      catalogueLanguage: "a"
+      featureAndBenefits:
+        - "a"
+        - "b"
+
+  featureAndBenefit:
+    type: object
+
+  catalogueLanguage:
+    type: object
+
 
   #
   # -- DO NOT EDIT BEYOND THIS POINT --
