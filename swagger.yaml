@@ -84,13 +84,13 @@ paths:
                 article:
                   href: /articles/{article_id}
                 marketArticles:
-                  href: /markets/{area_code}-{region_code}/articles
+                  href: /articles{?area_code,region_code}
                 marketArticle:
-                  href: /markets/{area_code}-{region_code}/articles/{article_id}
+                  href: /articles/{article_id}{?area_code,region_code}
                 modelCatalogue:
                   href: /models/{model_id}/catalogue
                 marketModelCatalogue:
-                  href: /markets/{area_code}-{region_code}/models/{model_id}/catalogue
+                  href: /models/{model_id}/catalogue{?area_code,region_code}
                 articleCatalogue:
                   href: /articles/{article_id}/catalogue
 
@@ -116,6 +116,8 @@ paths:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/marketingChannel'
+        - $ref: '#/parameters/areaCodeQuery'
+        - $ref: '#/parameters/regionCodeQuery'        
       responses:
         200:
           description: The list of articles
@@ -141,6 +143,8 @@ paths:
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/marketingChannel'
+        - $ref: '#/parameters/areaCodeQuery'
+        - $ref: '#/parameters/regionCodeQuery'        
         - $ref: '#/parameters/fields'
       responses:
         200:
@@ -291,67 +295,6 @@ paths:
           schema:
             $ref: '#/definitions/articleNotFoundError'
 
-  /markets/{area_code}-{region_code}/articles:
-    x-summary: Market Articles
-    x-description: |
-      Market-specific articles information.
-
-      ---
-
-      **Designer's Note**: As the market identifier is a compoud variable
-      consisting of area and region code we should use the comma (`,`) and
-      semi-colon (`;`) to indicate to "indicate nonhierarchical portions of the
-      URI" e.g.: `/markets;are=52,region=111` however this isn't supported in
-      Swagger 2.0 and as such the recommended work-around is to combine the two
-      parts as two separate path variables `{area_code}-{region_code}`.
-
-    parameters:
-      - $ref: '#/parameters/areaCode'
-      - $ref: '#/parameters/regionCode'
-      - $ref: '#/parameters/season'
-
-    get:
-      summary: Retrieve List of Articles on a Market
-      description: |
-        Get list of every article information specific to a particular
-        market.
-      parameters:
-        - $ref: '#/parameters/offset'
-        - $ref: '#/parameters/limit'
-      responses:
-        200:
-          description: The list of articles
-          schema:
-            $ref: '#/definitions/marketArticlesHAL'
-
-        404:
-          description: The requested market wasn't found.
-          headers:
-            Content-Type:
-              type: string
-              default: application/problem+json
-          schema:
-            $ref: '#/definitions/articleNotFoundError'
-
-  /markets/{area_code}-{region_code}/articles/{article_id}:
-    x-summary: Market Article
-    x-description: Market-specific Article information.
-    parameters:
-      - $ref: '#/parameters/areaCode'
-      - $ref: '#/parameters/regionCode'
-      - $ref: '#/parameters/articleId'
-      - $ref: '#/parameters/season'
-
-    get:
-      summary: Retrieve Market Article
-      description: |
-        Get market-specific information for a particular article.
-      responses:
-        200:
-          description: One Article
-          schema:
-            $ref: '#/definitions/marketArticleHAL'
-
   #
   # Catalogue Information
   #
@@ -360,14 +303,15 @@ paths:
     x-description: Global model catalogue information.
     parameters:
       - $ref: '#/parameters/modelId'
-      - $ref: '#/parameters/season'
 
     get:
       summary: Retrieve Model Catalogue
       description: Get a particular model's catalogue by model number.
       parameters:
         - $ref: '#/parameters/acceptLanguageHeader'
-
+        - $ref: '#/parameters/season'
+        - $ref: '#/parameters/areaCodeQuery'
+        - $ref: '#/parameters/regionCodeQuery'
       responses:
         200:
           description: Model Catalogue
@@ -380,25 +324,6 @@ paths:
               type: string
               default: Accept-Language
               x-example: Accept-Language
-          schema:
-            $ref: '#/definitions/catalogue'
-
-  /markets/{area_code}-{region_code}/models/{model_id}/catalogue:
-    x-summary: Market Model Catalogue
-    x-description: Market-specific model catalogue information.
-    parameters:
-      - $ref: '#/parameters/areaCode'
-      - $ref: '#/parameters/regionCode'
-      - $ref: '#/parameters/modelId'
-      - $ref: '#/parameters/season'
-
-    get:
-      summary: Retrieve Market Model Catalogue
-      description: |
-        Get a particular model catalogue specific to a market.
-      responses:
-        200:
-          description: Market Catalogue
           schema:
             $ref: '#/definitions/catalogue'
 
@@ -441,18 +366,18 @@ parameters:
     x-example: '10034'
 
   # Market Area Code
-  areaCode:
+  areaCodeQuery:
     name: area_code
-    in: path
+    in: query
     description: Code of an area
     required: true
     type: string
     x-example: 'area-code-1'
 
   # Market Region Code
-  regionCode:
+  regionCodeQuery:
     name: region_code
-    in: path
+    in: query
     description: Code of a region
     required: true
     type: string
@@ -983,51 +908,6 @@ definitions:
       color3Description: "core black"
       color4Code: "01F7"
       color4Description: "ftwr white"
-
-  #
-  # Market
-  #
-  market:
-    type: object
-
-  marketNotFoundError:
-    type: object
-    allOf:
-      - $ref: '#/definitions/problemDetail'
-    example:
-      title: 'Not Found'
-      detail: 'Cannot find the requested market'
-      status: 404
-      instance: '/markets/areacode-regioncode'
-
-  marketArticlesHAL:
-    type: object
-    allOf:
-      - $ref: '#/definitions/articlesHAL'    
-
-  marketArticleHAL:
-    type: object
-    allOf:
-      - $ref: '#/definitions/halResource'
-      - $ref: '#/definitions/articleSeasonal'
-    example:
-      _links:
-        self:
-          href: /markets/area1-region1/articles/015110
-        assets:
-          href: /articles/015110/assets
-        skus:
-          href: /articles/015110/skus
-        prices:
-          href: /articles/015110/prices
-        colors:
-          href: /articles/015110/colors
-        catalogue:
-          href: /articles/015110/catalogue
-        relatedArticles:
-          - href: /markets/area1-region1/articles/015111
-          - href: /markets/area1-region1/articles/015112
-      $ref: '#/definitions/articleSeasonal/example'      
 
   #
   # Catalogue
