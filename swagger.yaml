@@ -314,8 +314,8 @@ paths:
         | Available Filters | Parameter Location | Parameter Name(s)          |
         |-------------------|--------------------|----------------------------|
         | season            | query              | `season`                   |
-        | language          | header             | `Accept-Language`          |
-        | market            | query              | `region_code`, `area_code` |        
+        | market            | query              | `region_code`, `area_code` |
+        | language          | header             | `Accept-Language`          |                
       parameters:
         - $ref: '#/parameters/acceptLanguageHeader'
         - $ref: '#/parameters/season'
@@ -334,7 +334,7 @@ paths:
               default: Accept-Language
               x-example: Accept-Language
           schema:
-            $ref: '#/definitions/catalogue'
+            $ref: '#/definitions/modelCatalogueHAL'
 
   /articles/{article_id}/catalogue:
     x-summary: Article Catalogue
@@ -358,7 +358,7 @@ paths:
         200:
           description: Article Catalogue
           schema:
-            $ref: '#/definitions/catalogue'
+            $ref: '#/definitions/articleCatalogueHAL'
 
 #
 # Parameters Definitions
@@ -929,11 +929,32 @@ definitions:
   #
   # Catalogue
   #
-  catalogues:
+  modelCatalogueHAL:
     type: object
-
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/catalogue'
+    example:
+      _links:
+        self:
+          href: /models/10034/catalogue
+      $ref: '#/definitions/catalogue/example'
+  
+  articleCatalogueHAL:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/catalogue'
+    example:
+      _links:
+        self:
+          href: /articles/015110/catalogue
+      $ref: '#/definitions/catalogue/example'
+    
   catalogue:
     type: object
+    example:
+      a: 1
 
   #
   # -- DO NOT EDIT BEYOND THIS POINT --
