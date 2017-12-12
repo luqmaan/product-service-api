@@ -106,10 +106,11 @@ paths:
       description: | 
         Retrieve list of all articles.
 
-        | Available Filters |
-        |-------------------|
-        | season            |
-        | marketingChannel  |
+        | Available Filters | Parameter Location | Parameter Name(s)          |
+        |-------------------|--------------------|----------------------------|
+        | season            | query              | `season`                   |
+        | marketing channel | query              | `marketingChannel`         |
+        | market            | query              | `region_code`, `area_code` |
              
       parameters:
         - $ref: '#/parameters/offset'
@@ -135,10 +136,11 @@ paths:
       description: |
         Retrieve a particular article by its id.
 
-        | Available Filters |
-        |-------------------|
-        | season            |
-        | marketingChannel  |        
+        | Available Filters | Parameter Location | Parameter Name(s)          |
+        |-------------------|--------------------|----------------------------|
+        | season            | query              | `season`                   |
+        | marketing channel | query              | `marketingChannel`         |
+        | market            | query              | `region_code`, `area_code` |      
 
       parameters:
         - $ref: '#/parameters/season'
@@ -174,7 +176,7 @@ paths:
 
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
-        | season            | query              | season            |      
+        | season            | query              | `season`          |      
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -204,7 +206,7 @@ paths:
 
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
-        | season            | query              | season            |       
+        | season            | query              | `season`          |             
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -235,7 +237,7 @@ paths:
 
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
-        | season            | query              | season            |      
+        | season            | query              | `season`          |            
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -266,8 +268,8 @@ paths:
 
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
-        | season            | query              | season            |
-        | language          | header             | Accept-Language   | 
+        | season            | query              | `season`          |
+        | language          | header             | `Accept-Language` | 
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/acceptLanguageHeader'
