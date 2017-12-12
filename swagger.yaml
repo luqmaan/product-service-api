@@ -190,7 +190,7 @@ paths:
 
   /articles/{article_id}/prices:
     x-summary: Article Prices
-    x-description: Global articles prices.
+    x-description: Article prices.
     parameters:
       - $ref: '#/parameters/articleId'
 
@@ -205,6 +205,30 @@ paths:
 
         404:
           description: Prices for the given article weren't found
+          headers:
+            Content-Type:
+              type: string
+              default: application/problem+json
+          schema:
+            $ref: '#/definitions/articleNotFoundError'
+
+  /articles/{article_id}/colors:
+    x-summary: Article Colors
+    x-description: Article colors.
+    parameters:
+      - $ref: '#/parameters/articleId'
+
+    get:
+      summary: Retrieve Article Colors
+      description: Retrieve availabler colors for a particular article.
+      responses:
+        200:
+          description: Prices for an Article
+          schema:
+            $ref: '#/definitions/colorsHAL'
+
+        404:
+          description: Colors for the given article weren't found.
           headers:
             Content-Type:
               type: string
@@ -489,11 +513,13 @@ definitions:
           href: /articles/015110/skus
         prices:
           href: /articles/015110/prices
+        colors:
+          href: /articles/015110/colors          
         catalogue:
           href: /articles/015110/catalogue
-        relatedProducts:
-          - href: /articles/BY3041
-          - href: /articles/BY3042
+        relatedArticles:
+          - href: /articles/015111
+          - href: /articles/015112
       $ref: '#/definitions/articleSeasonal/example'
 
   #
@@ -565,8 +591,6 @@ definitions:
         carryOver: false
         retailIntroDate: "2017-06-01"
         retailExitDate: "2017-11-30"
-      colors:
-        - $ref: '#/definitions/color/example'
 
   #
   # eCommerce Article
@@ -592,42 +616,6 @@ definitions:
       onlineTo:
         type: string
         format: date-time
-
-  #
-  # Color
-  #
-  color:
-    type: object
-    properties:
-      color1Code:
-        type: string
-      color1Description:
-        type: string
-        description: Language-dependent
-      color2Code:
-        type: string
-      color2Description:
-        type: string
-        description: Language-dependent
-      color3Code:
-        type: string
-      color3Description:
-        type: string
-        description: Language-dependent
-      color4Code:
-        type: string
-      color4Description:
-        type: string
-        description: Language-dependent
-    example:
-      color1Code: "A0QM"
-      color1Description: "core black"
-      color2Code: "A98B"
-      color2Description: "utility black"
-      color3Code: "A0QM"
-      color3Description: "core black"
-      color4Code: "01F7"
-      color4Description: "ftwr white"
 
   articleNotFoundError:
     type: object
@@ -748,7 +736,7 @@ definitions:
         productSize: 540
 
   #
-  # Article Variations
+  # Article SKUs
   #
   skusHAL:
     type: object
@@ -888,6 +876,64 @@ definitions:
       validTo: "2017-12-31"
       priceValue: "74,98"
       countryCode: "AT"
+
+  #
+  # Article Colors
+  #
+  colorsHAL:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+    properties:
+      colorsCount:
+        type: number
+      colors:
+        type: array
+        items:
+          - $ref: '#/definitions/price'
+    example:
+      _links:
+        self:
+          href: /articles/015110/colors
+      colorsCount: 1
+      colors:
+        - $ref: '#/definitions/color/example'
+
+  #
+  # Color
+  #
+  color:
+    type: object
+    properties:
+      color1Code:
+        type: string
+      color1Description:
+        type: string
+        description: Language-dependent
+      color2Code:
+        type: string
+      color2Description:
+        type: string
+        description: Language-dependent
+      color3Code:
+        type: string
+      color3Description:
+        type: string
+        description: Language-dependent
+      color4Code:
+        type: string
+      color4Description:
+        type: string
+        description: Language-dependent
+    example:
+      color1Code: "A0QM"
+      color1Description: "core black"
+      color2Code: "A98B"
+      color2Description: "utility black"
+      color3Code: "A0QM"
+      color3Description: "core black"
+      color4Code: "01F7"
+      color4Description: "ftwr white"      
 
   #
   # Market
