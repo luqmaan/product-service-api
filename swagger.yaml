@@ -106,10 +106,10 @@ paths:
       description: | 
         Retrieve list of all articles.
 
-        | Available Filter |
-        |------------------|
-        | season           |
-        | marketingChannel |
+        | Available Filters |
+        |-------------------|
+        | season            |
+        | marketingChannel  |
              
       parameters:
         - $ref: '#/parameters/offset'
@@ -130,7 +130,14 @@ paths:
 
     get:
       summary: Retrieve Article
-      description: Retrieve a particular article by its id.
+      description: |
+        Retrieve a particular article by its id.
+
+        | Available Filters |
+        |-------------------|
+        | season            |
+        | marketingChannel  |        
+
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/marketingChannel'
@@ -158,7 +165,12 @@ paths:
 
     get:
       summary: Retrieve Article Assets
-      description: Retrieve all assets for a particular article.
+      description: |
+        Retrieve all assets for a particular article.
+
+        | Available Filters |
+        |-------------------|
+        | season            |        
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -183,7 +195,12 @@ paths:
       - $ref: '#/parameters/articleId'
     get:
       summary: Retrieve Article SKUs
-      description: Retrieve all SKUs for a particular article.
+      description: |
+        Retrieve all SKUs for a particular article.
+
+        | Available Filters |
+        |-------------------|
+        | season            |        
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -209,7 +226,12 @@ paths:
 
     get:
       summary: Retrieve Article Prices
-      description: Retrieve prices for a particular article.
+      description: | 
+        Retrieve prices for a particular article.
+
+        | Available Filters |
+        |-------------------|
+        | season            |        
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -235,7 +257,13 @@ paths:
 
     get:
       summary: Retrieve Article Colors
-      description: Retrieve available colors for a particular article.
+      description: |
+        Retrieve available colors for a particular article.
+
+        | Available Filters |
+        |-------------------|
+        | season            |
+        | language          |        
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/acceptLanguageHeader'
