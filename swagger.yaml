@@ -221,9 +221,21 @@ paths:
     get:
       summary: Retrieve Article Colors
       description: Retrieve availabler colors for a particular article.
+      parameters:
+        - $ref: '#/parameters/acceptLanguageHeader'
+      
       responses:
         200:
           description: Prices for an Article
+          headers:
+            Content-Language:
+              type: string
+              default: en
+              x-example: en
+            Vary:
+              type: string
+              default: Accept-Language
+              x-example: Accept-Language          
           schema:
             $ref: '#/definitions/colorsHAL'
 
@@ -568,11 +580,6 @@ definitions:
           retailExitDate:
             type: string
             format: date-time
-      colors:
-        type: array
-        description: Array of article colors, language-specific
-        items:
-          $ref: '#/definitions/color'
     example:
       articleNumber: "015110"
       modelNumber: "10034"
@@ -648,7 +655,6 @@ definitions:
       assetCount: 1
       assets:
         - $ref: '#/definitions/asset/example'
-
 
   #
   # Asset
