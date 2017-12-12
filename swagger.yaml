@@ -124,6 +124,10 @@ paths:
         | season            | query              | `season`                   |
         | marketing channel | query              | `marketingChannel`         |
         | market            | query              | `region_code`, `area_code` |
+
+        > NOTE: The embedded articles in the `_embedded` field might not represent
+        > the latest information, nor be complete. To retireve the full up-to-date
+        > representation of an article exercise its `self` relation.
              
       parameters:
         - $ref: '#/parameters/offset'
