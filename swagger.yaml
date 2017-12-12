@@ -964,11 +964,37 @@ definitions:
     example:
       catalogueLanguage: "a"
       featureAndBenefits:
-        - "a"
-        - "b"
+        - $ref: '#/definitions/featureAndBenefit/example'
 
   featureAndBenefit:
     type: object
+    properties:
+      featureAndBenefitCode: 
+        type: string
+      businessCode:
+        type: string
+      shoePart:
+        type: string
+      # TODO: Is this needed with language negotiation?
+      #langaugeCode:
+      #  type: string 
+      featureName:
+        type: string
+      featureDescription:
+        type: string
+      logoName:
+        type: string
+      logoHref:
+        type: string
+        format: uri
+    example:
+      featureAndBenefitCode: "68465468"
+      businessCode: "BU Young Athlete"
+      shoePart: "Upper"
+      featureName: "Costura à maquina"
+      featureDescription: "construction nylon/TPU pour un bon toucher de balle et une bonne résistance à l'usure."
+      logoName: "ECO_OrthoLiteLogo"
+      logoHref: "http://domain.com/logo.jpeg"
 
   catalogueLanguage:
     type: object
