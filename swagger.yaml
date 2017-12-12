@@ -34,7 +34,7 @@ info:
     1. Wholesale (eCatalogue)
 
     These are communicated by the optional `marketingChannel` query parameter.
-    When the parameter is omitted, the information common for "all" channels are returned.
+    When the parameter is omitted, the information common for "global" channel is returned.
 
     ## Language Variants
     Where applicable, product information support standard [HTTP Language Variants
