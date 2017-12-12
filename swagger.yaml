@@ -214,7 +214,7 @@ paths:
 
   /articles/{article_id}/colors:
     x-summary: Article Colors
-    x-description: Article colors.
+    x-description: Article colors, language dependent (see Language Variants).
     parameters:
       - $ref: '#/parameters/articleId'
 
