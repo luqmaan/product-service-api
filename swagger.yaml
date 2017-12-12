@@ -103,7 +103,14 @@ paths:
 
     get:
       summary: Retrieve List of Articles
-      description: Retrieve list of all articles.
+      description: | 
+        Retrieve list of all articles.
+
+        | Available Filter |
+        |------------------|
+        | season           |
+        | marketingChannel |
+             
       parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
@@ -287,7 +294,7 @@ paths:
         200:
           description: The list of articles
           schema:
-            $ref: '#/definitions/marketArticles'
+            $ref: '#/definitions/marketArticlesHAL'
 
         404:
           description: The requested market wasn't found.
@@ -315,7 +322,7 @@ paths:
         200:
           description: One Article
           schema:
-            $ref: '#/definitions/articleHAL'
+            $ref: '#/definitions/marketArticleHAL'
 
   #
   # Catalogue Information
@@ -965,8 +972,34 @@ definitions:
       status: 404
       instance: '/markets/areacode-regioncode'
 
-  marketArticles:
+  marketArticlesHAL:
     type: object
+    allOf:
+      - $ref: '#/definitions/articlesHAL'    
+
+  marketArticleHAL:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+      - $ref: '#/definitions/articleSeasonal'
+    example:
+      _links:
+        self:
+          href: /markets/area1-region1/articles/015110
+        assets:
+          href: /articles/015110/assets
+        skus:
+          href: /articles/015110/skus
+        prices:
+          href: /articles/015110/prices
+        colors:
+          href: /articles/015110/colors
+        catalogue:
+          href: /articles/015110/catalogue
+        relatedArticles:
+          - href: /markets/area1-region1/articles/015111
+          - href: /markets/area1-region1/articles/015112
+      $ref: '#/definitions/articleSeasonal/example'      
 
   #
   # Catalogue
