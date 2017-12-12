@@ -220,7 +220,7 @@ paths:
 
     get:
       summary: Retrieve Article Colors
-      description: Retrieve availabler colors for a particular article.
+      description: Retrieve available colors for a particular article.
       parameters:
         - $ref: '#/parameters/acceptLanguageHeader'
       
