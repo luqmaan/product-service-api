@@ -12,6 +12,16 @@ info:
     To propose a change, head over to [GitHub repository](https://github.com/adidas-group/product-service-api),
     create a new branch with proposed change and open a [pull request](https://help.github.com/articles/about-pull-requests/).
 
+    ## Available Affordances
+    The API affords the following top-level actions:
+    - Retrieve all articles 
+    - Retrieve all articles for a particular market
+    - Retrieve particular article information
+    - Retrieve particular article information on a specific market
+    - Retrieve the catalogue information for a particular article
+    - Retrieve the catalogue information for a particular model
+    - Retrieve the catalogue information for a particular model and market
+
     ## Article Information Levels
     Article information are provided on the following levels:
 
@@ -39,15 +49,15 @@ info:
     > NOTE: Due to the Apiary limitations, marketing channels datamodels are not 
     rendered. To see a marketing channel model see the source OpenAPI Spec file. 
 
+    ## Season Information
+    Where applicable, seasonal information might be retrieved using the optional
+    `season` parameter. When no `season` parameter is provided the current
+    season is returned.    
+
     ## Language Variants
     Where applicable, product information support standard [HTTP Language Variants
     negotiation](https://adidas-group.gitbooks.io/api-guidelines/content/execution/localization.html)
     using the `Accept-Language` HTTP Header.
-
-    ## Season Information
-    Where applicable, seasonal information might be retrieved using the optional
-    `season` parameter. When no `season` parameter is provided the current
-    season is returned.
 
 produces:
   - application/hal+json      # Representation message format
