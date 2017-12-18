@@ -21,6 +21,7 @@ info:
     - Retrieve the catalogue information for a particular article
     - Retrieve the catalogue information for a particular model
     - Retrieve the catalogue information for a particular model and market
+    - Retrieve all markets, and their area and region codes
 
     ## Article Information Levels
     Article information are provided on the following levels:
