@@ -189,13 +189,7 @@ paths:
     get:
       summary: Retrieve Article Assets
       description: |
-        Retrieve all assets for a particular article.
-
-        | Available Filters | Parameter Location | Parameter Name(s) |
-        |-------------------|--------------------|-------------------|
-        | season            | query              | `season`          |      
-      parameters:
-        - $ref: '#/parameters/season'
+        Retrieve all assets for a particular article.   
       responses:
         200:
           description: Assets for an Article
@@ -217,15 +211,7 @@ paths:
     parameters:
       - $ref: '#/parameters/articleId'
     get:
-      summary: Retrieve Article SKUs
-      description: |
-        Retrieve all SKUs for a particular article.
-
-        | Available Filters | Parameter Location | Parameter Name(s) |
-        |-------------------|--------------------|-------------------|
-        | season            | query              | `season`          |             
-      parameters:
-        - $ref: '#/parameters/season'
+      summary: Retrieve Article SKUs.
       responses:
         200:
           description: SKUs for an Article
