@@ -553,6 +553,14 @@ definitions:
         type: string
       genderDescription:
         type: string
+      # TODO: Consider reworking this more generic data structure
+      # gender: 
+      #   type: object
+      #   properties:
+      #     code:
+      #       type: string
+      #     description:
+      #       type: string
       brandCode:
         type: string
       brandDescription:
