@@ -14,7 +14,7 @@ info:
 
     ## Available Affordances
     The API affords the following top-level actions:
-    - Retrieve all articles 
+    - Retrieve all articles
     - Retrieve all articles for a particular market
     - Retrieve particular article information
     - Retrieve particular article information on a specific market
@@ -46,13 +46,13 @@ info:
     These are communicated by the optional `marketingChannel` query parameter.
     When the parameter is omitted, the information common for "global" channel is returned.
 
-    > NOTE: Due to the Apiary limitations, marketing channels datamodels are not 
-    rendered. To see a marketing channel model see the source OpenAPI Spec file. 
+    > NOTE: Due to the Apiary limitations, marketing channels datamodels are not
+    rendered. To see a marketing channel model see the source OpenAPI Spec file.
 
     ## Season Information
     Where applicable, seasonal information might be retrieved using the optional
     `articleSeason` parameter. When no `articleSeason` parameter is provided the current
-    season is returned.    
+    season is returned.
 
     ## Language Variants
     Where applicable, product information support standard [HTTP Language Variants
@@ -116,7 +116,7 @@ paths:
 
     get:
       summary: Retrieve List of Articles
-      description: | 
+      description: |
         Retrieve list of all articles.
 
         | Available Filters | Parameter Location | Parameter Name(s)          |
@@ -128,14 +128,14 @@ paths:
         > NOTE: The embedded articles in the `_embedded` field might not represent
         > the latest information, nor be complete. To retireve the full up-to-date
         > representation of an article exercise its `self` relation.
-             
+
       parameters:
         - $ref: '#/parameters/offset'
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/marketingChannel'
         - $ref: '#/parameters/areaCodeQuery'
-        - $ref: '#/parameters/regionCodeQuery'        
+        - $ref: '#/parameters/regionCodeQuery'
       responses:
         200:
           description: The list of articles
@@ -157,13 +157,13 @@ paths:
         |-------------------|--------------------|----------------------------|
         | season            | query              | `articleSeason`            |
         | marketing channel | query              | `marketingChannel`         |
-        | market            | query              | `region_code`, `area_code` |      
+        | market            | query              | `region_code`, `area_code` |
 
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/marketingChannel'
         - $ref: '#/parameters/areaCodeQuery'
-        - $ref: '#/parameters/regionCodeQuery'        
+        - $ref: '#/parameters/regionCodeQuery'
         - $ref: '#/parameters/fields'
       responses:
         200:
@@ -189,7 +189,7 @@ paths:
     get:
       summary: Retrieve Article Assets
       description: |
-        Retrieve all assets for a particular article.   
+        Retrieve all assets for a particular article.
       responses:
         200:
           description: Assets for an Article
@@ -235,12 +235,12 @@ paths:
 
     get:
       summary: Retrieve Article Prices
-      description: | 
+      description: |
         Retrieve prices for a particular article.
 
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
-        | season            | query              | `articleSeason`   |            
+        | season            | query              | `articleSeason`   |
       parameters:
         - $ref: '#/parameters/season'
       responses:
@@ -272,7 +272,7 @@ paths:
         | Available Filters | Parameter Location | Parameter Name(s) |
         |-------------------|--------------------|-------------------|
         | season            | query              | `articleSeason`   |
-        | language          | header             | `Accept-Language` | 
+        | language          | header             | `Accept-Language` |
       parameters:
         - $ref: '#/parameters/season'
         - $ref: '#/parameters/acceptLanguageHeader'
@@ -311,14 +311,14 @@ paths:
 
     get:
       summary: Retrieve Model Catalogue
-      description: | 
+      description: |
         Get a particular model's catalogue by model number.
 
         | Available Filters | Parameter Location | Parameter Name(s)          |
         |-------------------|--------------------|----------------------------|
         | season            | query              | `articleSeason`            |
         | market            | query              | `region_code`, `area_code` |
-        | language          | header             | `Accept-Language`          |                
+        | language          | header             | `Accept-Language`          |
       parameters:
         - $ref: '#/parameters/acceptLanguageHeader'
         - $ref: '#/parameters/season'
@@ -353,10 +353,10 @@ paths:
         | Available Filters | Parameter Location | Parameter Name(s)          |
         |-------------------|--------------------|----------------------------|
         | season            | query              | `articleSeason`            |
-        | language          | header             | `Accept-Language`          |        
+        | language          | header             | `Accept-Language`          |
       parameters:
-        - $ref: '#/parameters/acceptLanguageHeader'      
-        - $ref: '#/parameters/season'      
+        - $ref: '#/parameters/acceptLanguageHeader'
+        - $ref: '#/parameters/season'
       responses:
         200:
           description: Article Catalogue
@@ -535,35 +535,22 @@ definitions:
       articleDescription:
         type: string
         description: Always in english
-      genderCode:
-        type: string
-      genderDescription:
-        type: string
-      # TODO: Consider reworking this more generic data structure
-      # gender: 
-      #   type: object
-      #   properties:
-      #     code:
-      #       type: string
-      #     description:
-      #       type: string
-      brandCode:
-        type: string
-      brandDescription:
-        type: string
-      productTypeCode:
-        type: string
-      productTypeDescription:
-        type: string
-      colorwayName:
-        type: string
-      colorwayDescription:
-        type: string
-        description: Is it short description or long - both? English only
-      ageGroupCode:
-        type: string
-      ageGroupDescription:
-        type: string
+      gender:
+        $ref: '#/definitions/codeDescriptionTuple'
+      brand:
+        $ref: '#/definitions/codeDescriptionTuple'
+      productType:
+        $ref: '#/definitions/codeDescriptionTuple'
+      ageGroup:
+        $ref: '#/definitions/codeDescriptionTuple'
+      colorway:
+        type: object
+        properties:
+          name:
+            type: string
+          description:
+            type: string
+            description: Is it short description or long - both? English only
       season:
         type: object
         description: Sesonal article attributes
@@ -580,16 +567,21 @@ definitions:
       articleNumber: "015110"
       modelNumber: "10034"
       articleDescription: "COPA MUNDIAL"
-      genderCode: "M"
-      genderDescription: "MALE"
-      brandCode: "11"
-      brandDescription: "ADIDAS"
-      productTypeCode: "104"
-      productTypeDescription: "FOOTBALL SHOES (FIRM GROUND)"
-      colorwayName: "FTWR WHITE/BLACK"
-      colorwayDescription: "BLABAS/GRAFIT/BLABAS"
-      ageGroupCode: "A"
-      ageGroupDescription: "ADULT"
+      gender:
+        code: "M"
+        description: "MALE"
+      brand:
+        code: "11"
+        description: "ADIDAS"
+      productType:
+        code: "104"
+        description: "FOOTBALL SHOES (FIRM GROUND)"
+      ageGroup:
+        code: "A"
+        description: "ADULT"
+      colorway:
+        name: "FTWR WHITE/BLACK"
+        description: "BLABAS/GRAFIT/BLABAS"
       season:
         carryOver: false
         retailIntroDate: "2017-06-01"
@@ -906,36 +898,29 @@ definitions:
   #
   color:
     type: object
+    description: Color descriptions are language-dependent
     properties:
-      color1Code:
-        type: string
-      color1Description:
-        type: string
-        description: Language-dependent
-      color2Code:
-        type: string
-      color2Description:
-        type: string
-        description: Language-dependent
-      color3Code:
-        type: string
-      color3Description:
-        type: string
-        description: Language-dependent
-      color4Code:
-        type: string
-      color4Description:
-        type: string
-        description: Language-dependent
+      color1:
+        $ref: '#/definitions/codeDescriptionTuple'
+      color2:
+        $ref: '#/definitions/codeDescriptionTuple'
+      color3:
+        $ref: '#/definitions/codeDescriptionTuple'
+      color4:
+        $ref: '#/definitions/codeDescriptionTuple'      
     example:
-      color1Code: "A0QM"
-      color1Description: "core black"
-      color2Code: "A98B"
-      color2Description: "utility black"
-      color3Code: "A0QM"
-      color3Description: "core black"
-      color4Code: "01F7"
-      color4Description: "ftwr white"
+      color1:
+        code: "A0QM"
+        description: "core black"
+      color2:
+        code: "A98B"
+        description: "utility black"
+      color3:
+        code: "A0QM"
+        description: "core black"
+      color4:
+        code: "01F7"
+        description: "ftwr white"
 
   #
   # Catalogue
@@ -950,7 +935,7 @@ definitions:
         self:
           href: /models/10034/catalogue
       $ref: '#/definitions/catalogue/example'
-  
+
   articleCatalogueHAL:
     type: object
     allOf:
@@ -961,7 +946,7 @@ definitions:
         self:
           href: /articles/015110/catalogue
       $ref: '#/definitions/catalogue/example'
-    
+
   catalogue:
     type: object
     properties:
@@ -981,7 +966,7 @@ definitions:
   featureAndBenefit:
     type: object
     properties:
-      featureAndBenefitCode: 
+      featureAndBenefitCode:
         type: string
       businessCode:
         type: string
@@ -989,7 +974,7 @@ definitions:
         type: string
       # TODO: Is this needed with language negotiation?
       #langaugeCode:
-      #  type: string 
+      #  type: string
       featureName:
         type: string
       featureDescription:
@@ -1052,8 +1037,20 @@ definitions:
       bullets3: "Nackenband"
       bullets4: "Επένδυση προστασίας από τον άνεμο στο μπροστινό μέρος. Μανσέτες με ανοίγματα για τους αντίχειρες"
       bullets5: "Woven Belgium crest on chest"
-      bullets6: "3 bandas en las mangas; logotipo de adidas serigrafiado a la derecha del pecho" 
+      bullets6: "3 bandas en las mangas; logotipo de adidas serigrafiado a la derecha del pecho"
       bulletMaterial: "Maille double 100 % polyester."
+
+
+  #
+  # General Purpuse Data Structures
+  #
+  codeDescriptionTuple:
+    type: object
+    properties:
+      code:
+        type: string
+      description:
+        type: string
 
   #
   # -- DO NOT EDIT BEYOND THIS POINT --
