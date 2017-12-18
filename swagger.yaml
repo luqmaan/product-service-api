@@ -214,7 +214,7 @@ paths:
     parameters:
       - $ref: '#/parameters/articleId'
     get:
-      summary: Retrieve Article SKUs.
+      summary: Retrieve Article SKUs
       responses:
         200:
           description: SKUs for an Article
