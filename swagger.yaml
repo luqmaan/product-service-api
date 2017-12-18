@@ -106,6 +106,8 @@ paths:
                   href: /models/{model_id}/catalogue{?area_code,region_code}
                 articleCatalogue:
                   href: /articles/{article_id}/catalogue
+                markets:
+                  href: /markets
 
   #
   # Article Information
@@ -362,6 +364,22 @@ paths:
           description: Article Catalogue
           schema:
             $ref: '#/definitions/articleCatalogueHAL'
+
+  /markets:
+    x-summary: Markets
+    x-description: List of available markets and their area and region codes.
+
+    get:
+      summary: Retrieve Markets
+      description: Retrieve the List of Available Markets
+
+      responses:
+        200:
+          description: | 
+            List of area-code region-code tuples toghether with their specific article
+            listings.
+          schema:
+            $ref: '#/definitions/marketsHAL'
 
 #
 # Parameters Definitions
@@ -1040,6 +1058,43 @@ definitions:
       bullets6: "3 bandas en las mangas; logotipo de adidas serigrafiado a la derecha del pecho"
       bulletMaterial: "Maille double 100 % polyester."
 
+  #
+  # Market
+  #
+  marketsHAL:
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+    properties:
+      marketsCount:
+        type: number
+      markets:
+        type: array
+        items:
+          - $ref: '#/definitions/marketHAL'
+    example:
+      _links:
+        self:
+          href: /markets
+      marketsCount: 1
+      markets:
+        - $ref: '#/definitions/marketHAL/example'
+
+  marketHAL: 
+    type: object
+    allOf:
+      - $ref: '#/definitions/halResource'
+    properties:
+      areaCode:
+        type: string
+      regionCode:
+        type: string
+    example:
+      _links:
+        marketArticles:
+          href: /articles?area_code=A1,region_code=50
+      areaCode: 'A1'
+      regionCode: '50'
 
   #
   # General Purpuse Data Structures
